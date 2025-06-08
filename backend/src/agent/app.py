@@ -2,11 +2,23 @@
 import pathlib
 from fastapi import FastAPI, Request, Response
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 import fastapi.exceptions
 
 # Define the FastAPI app
 app = FastAPI()
 
+# Add root path redirect to /app
+@app.get("/")
+async def root():
+    """Redirect root path to the frontend app"""
+    return RedirectResponse(url="/app", status_code=302)
+
+# Add favicon handler
+@app.get("/favicon.ico")
+async def favicon():
+    """Handle favicon requests"""
+    return Response(status_code=204)
 
 def create_frontend_router(build_dir="../frontend/dist"):
     """Creates a router to serve the React frontend.
